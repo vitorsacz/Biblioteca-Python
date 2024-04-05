@@ -24,6 +24,17 @@ class Ordenacao:
             return self.quicksort(menores_que_pivo) + [pivo] + self.quicksort(maiores_que_pivo)
     
 
+    @staticmethod
+    def selection_sort(arr):
+        n = len(arr)
+        for i in range(n):
+            min_index = i
+            for j in range(i+1, n):
+                if arr[j] < arr[min_index]:
+                    min_index = j
+            arr[i], arr[min_index] = arr[min_index], arr[i]
+        return arr
+
 
 
     @staticmethod
@@ -36,35 +47,49 @@ class Ordenacao:
         return lista
     
     
-    
-def merge(esquerda, direita):
-    resultado = []
-    i = j = 0
+    @staticmethod
+    def mergeSort(arr):
+        aux = [0] * len(arr)
+        Ordenacao.mergesort(arr, aux, 0, len(arr) - 1)
+        return arr
 
-    while i < len(esquerda) and j < len(direita):
-        if esquerda[i] < direita[j]:
-            resultado.append(esquerda[i])
-            i += 1
-        else:
-            resultado.append(direita[j])
-            j += 1
+    @staticmethod
+    def merge(arr, aux, left, mid, right):
+        
+        for k in range(left, right + 1):
+            aux[k] = arr[k]
 
-    resultado.extend(esquerda[i:])
-    resultado.extend(direita[j:])
+        i = left
+        j = mid + 1
 
-    return resultado
+        for k in range(left, right + 1):
+            if i > mid:
+                arr[k] = aux[j]
+                j += 1
+            elif j > right:
+                arr[k] = aux[i]
+                i += 1
+            elif aux[j] < aux[i]:
+                arr[k] = aux[j]
+                j += 1
+            else:
+                arr[k] = aux[i]
+                i += 1
+
+    @staticmethod
+    def mergesort(arr, aux, left, right):
+        if right <= left:
+            return
+        
+        mid = (left + right) // 2
+
+        #
+        Ordenacao.mergesort(arr, aux, left, mid)
+
+       
+        Ordenacao.mergesort(arr, aux, mid + 1, right)
 
 
-def merge_sort(lista):
-    if len(lista) <= 1:
-        return lista
-    meio = len(lista) // 2
-    esquerda = lista[:meio]
-    direita = lista[meio:]
+        Ordenacao.merge(arr, aux, left, mid, right)
 
-    esquerda = merge_sort(esquerda)
-    direita = merge_sort(direita)
-
-    return merge(esquerda, direita)
-
-                
+                    
